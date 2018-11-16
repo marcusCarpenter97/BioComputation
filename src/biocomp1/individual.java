@@ -15,7 +15,7 @@ public class individual {
     private int fitness;
     
     public individual() {
-        geneSize = 60;
+        geneSize = 160;
         gene = new int[geneSize];
         fitness = 0;
     }

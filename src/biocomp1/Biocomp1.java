@@ -36,7 +36,7 @@ public class Biocomp1 {
         save(pop, log);
 
         int generations = 0;
-        int maxGen = 50;
+        int maxGen = 100;
         while (generations < maxGen) {
 
             pop.roulettewheelSelection();

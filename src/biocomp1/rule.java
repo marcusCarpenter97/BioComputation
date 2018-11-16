@@ -10,12 +10,12 @@ package biocomp1;
  * @author marcus
  */
 public class rule {
-    private final int[] cond;
+    private int[] cond;
     private int out;
     private final int ruleSize;
     
     public rule() {
-        ruleSize = 5;
+        ruleSize = 7;
         cond = new int[ruleSize];
         out = 0;
     }
@@ -42,5 +42,9 @@ public class rule {
 
     public void setOut(int out) {
         this.out = out;
+    }
+    
+    public void setCond(int[] newCond) {
+        cond = newCond;
     }
 }

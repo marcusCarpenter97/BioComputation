@@ -18,17 +18,20 @@ public class population {
 
     private final int popSize;
     private final double mutationRate;
+    private final double cossoverRate;
     private final individual[] population;
     private final individual[] offspring;
     private final int[] crossoverPoints;
     private final double[] mrates;
-    private final rule currRule;
+    private rule currRule;
     private final int numOfRules;
     private final ArrayList<data> trainingData;
+    private final ArrayList<rule> ruleList;
 
     public population() {
-        popSize = 10;  //test
-        mutationRate = 0.02;  // 1 divided by gene size
+        popSize = 100;  //test
+        mutationRate = 0.05;  // 1 divided by gene size or 1 divided by pop size
+        cossoverRate = 0; // 
         population = new individual[popSize];
         offspring = new individual[popSize];
         crossoverPoints = new int[popSize];
@@ -36,15 +39,22 @@ public class population {
         numOfRules = 10;
         currRule = new rule();
         trainingData = new ArrayList<>();
+        ruleList = new ArrayList<>();
     }
     
     public void initPop() {
-        int i, j;
+        int i, j, rand;
         for (i = 0; i < popSize; i++) {
             population[i] = new individual();
             offspring[i] = new individual();
             for (j = 0; j < population[i].getSize(); j++) {
-                population[i].setGene(getRandBit(), j);
+                rand = getRandBit();
+                if((j % population[i].getSize()) == 0 && rand == 2){  //???
+                    rand--;
+                }
+                population[i].setGene(rand, j);
+//                population[i].setGene(getRandBit(), j);  //check for action bit, cant allow 2`s
+                
             }
         }
         try{
@@ -63,7 +73,7 @@ public class population {
      *          if new rule is in training data 
      *              increment fitness
      */
-    public void makeRules() {
+    public void makeRules() { //if currGene mod geneSize == 0 then currGene is action bit
             
         int i, j, k, currGene;
         
@@ -79,17 +89,39 @@ public class population {
                 currRule.setOut(population[i].getGene(currGene));
                 currGene++;
                 
-                if(findMatch(currRule)){
-                    population[i].updateFitness();
+                ruleList.add(currRule); 
+                
+                currRule = new rule();
+                
+//                if(findMatch(currRule)){
+//                    population[i].updateFitness();
+//                }
+            }
+            
+//            for(rule r : ruleList) {
+//                if(findMatch(r)){
+//                    population[i].updateFitness();
+//                }
+//            }
+            for(data d : trainingData) {
+                for (rule r : ruleList) {
+                    if(compareIntArrays(r.getCond(), d.getFullData())){
+                        if(r.getOut()== d.getLabel()){
+                            population[i].updateFitness();
+                        }
+                        break;
+                    }
                 }
             }
+
+            ruleList.clear();
         }
     }
     
     public void readTrainingData() throws FileNotFoundException {
         int[] tempData;
         int tempInt;
-        File f = new File("/home/marcus/NetBeansProjects/biocomp1/src/dataFiles/data1.txt");
+        File f = new File("/home/marcus/NetBeansProjects/biocomp1/src/dataFiles/data2.txt");
         Scanner data = new Scanner(f);
         data.nextLine();
         while(data.hasNext()){
@@ -107,7 +139,7 @@ public class population {
         }
     }
     
-    public boolean findMatch(rule currRule) {
+    public boolean findMatch(rule currRule) { //???
         for(data d : trainingData){
            if(compareIntArrays(currRule.getCond(), d.getFullData())){
               if(currRule.getOut()== d.getLabel()){
@@ -174,15 +206,28 @@ public class population {
     
     public void mutation(){
         int i, j;
-        double mRate;
+        double mRate, tempRand;
         for (i = 0; i < popSize; i++) {
             for (j = 0; j < offspring[i].getSize(); j++) {
                 mRate = Math.random();
                 if (mRate < mutationRate) {
-                    if (offspring[i].getGene(j) == 1) {
-                        offspring[i].setGene(0, j);
-                    } else {
-                        offspring[i].setGene(1, j);
+                    //if off.gene == 0 or 2 get randnum(0-2)
+                    //if off.gene == 1 get randnum(0-2) except on i mod size == 0 (0-1)
+                    switch (offspring[i].getGene(j)) {
+                        case 0:
+                            offspring[i].setGene(1, j);
+                            break;
+                        case 2:
+                            offspring[i].setGene(1, j);
+                            break;
+                        default:
+                            tempRand = Math.random();
+                            if (tempRand < 0.5 || (i % offspring[i].getSize()) == 0) {
+                                offspring[i].setGene(0, j);
+                            } else {
+                                offspring[i].setGene(2, j);
+                            }
+                            break;
                     }
                 }
             }
@@ -255,14 +300,14 @@ public class population {
     }
     
     public boolean compareIntArrays(int[] a1, int[] a2){
-        int i;
+        int i, correctCount = 0;
         
         for(i = 0; i < a1.length; i++){
-            if(a1[i] != a2[i]){
-                return false;
+            if((a1[i] == a2[i]) || (a1[i] == 2)){
+                correctCount++;
             }
         }
-        return true;
+        return correctCount == a1.length;
     }
     
     public void resetFitness(){
@@ -286,7 +331,7 @@ public class population {
 
     public int getRandBit() {
         int rand;
-        rand = (int) (Math.random() * 2); 
+        rand = (int) (Math.random() * 3); 
         switch (rand) {
             case 0:
                 return 0;
