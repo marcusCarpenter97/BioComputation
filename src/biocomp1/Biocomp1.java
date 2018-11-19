@@ -18,10 +18,13 @@ public class Biocomp1 {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) throws IOException   {
+    public static void main(String[] args) throws IOException {
         
-        File log = new File("/home/marcus/NetBeansProjects/biocomp1/src/dataFiles/log.txt");
+        String logPath = "/home/marcus/NetBeansProjects/biocomp1/src/dataFiles/log.csv";
+
+        File log = new File(logPath);
         if (log.exists() == false) {
             log.createNewFile();
         }
@@ -32,15 +35,15 @@ public class Biocomp1 {
 
         System.out.println("original pop");
         pop.printPopulation();
-        
-        save(pop, log);
+
+        save(pop, log);  // Improve csv!!!
 
         int generations = 0;
-        int maxGen = 100;
+        int maxGen = 3320;  // Best so far!!!
         while (generations < maxGen) {
 
             pop.roulettewheelSelection();
-            
+
             pop.crossover();
             pop.makeRules();
 
@@ -50,24 +53,26 @@ public class Biocomp1 {
             pop.survivorSelection();
 
             generations++;
-            
+
             save(pop, log);
         }
-        
+
         System.out.println("Pop after 50 gen");
         pop.printPopulation();
-        System.out.println(pop.printBest());  
     }
-    
+
     public static void save(population pop, File log) throws IOException {
+        
+        int totalFitness = pop.calctotal();
+        
         try (PrintWriter out = new PrintWriter(new FileWriter(log, true))) {
             out.append(pop.getmutationRate());
             out.append(",");
-            out.append(pop.total());
+            out.append(Integer.toString(totalFitness));
             out.append(",");
-            out.append(pop.average());
+            out.append(Integer.toString(totalFitness/pop.getSize()));
             out.append(",");
-            out.append(pop.printBest());
+            out.append(pop.getBest());
             out.append("\n");
         }
     }

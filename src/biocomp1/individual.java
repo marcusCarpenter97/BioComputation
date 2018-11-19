@@ -10,45 +10,46 @@ package biocomp1;
  * @author marcus
  */
 public class individual {
+
     private final int geneSize;
     private final int[] gene;
     private int fitness;
-    
+
     public individual() {
-        geneSize = 160;
+        geneSize = 80;  // 60 for data 1 or 80 for data 2
         gene = new int[geneSize];
         fitness = 0;
     }
-    
-    public int getSize(){
+
+    public int getSize() {
         return geneSize;
     }
-    
-    public int getFitness(){
+
+    public int getFitness() {
         return fitness;
     }
-    
-    public void setFitness(int f){
+
+    public void setFitness(int f) {
         fitness = f;
     }
-    
-    public void setGene(int g, int i){
+
+    public void setGene(int g, int i) {
         gene[i] = g;
     }
-    
+
     public int getGene(int i) {
         return gene[i];
     }
 
-    public void updateFitness(){
+    public void updateFitness() {
         fitness++;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         String g = "";
         for (int i = 0; i < geneSize; i++) {
-            g += " " + gene[i];
+            g += gene[i];
         }
         return g + " - " + fitness;
     }
