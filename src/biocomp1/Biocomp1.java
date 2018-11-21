@@ -30,17 +30,21 @@ public class Biocomp1 {
         }
 
         population pop = new population();
+        
+        addHeader(pop, log);
+        
         pop.initPop();
         pop.makeRules();
 
         System.out.println("original pop");
         pop.printPopulation();
+        
+        int generation = 0;
 
-        save(pop, log);  // Improve csv!!!
+        save(pop, log, generation);
 
-        int generations = 0;
         int maxGen = 3320;  // Best so far!!!
-        while (generations < maxGen) {
+        while (generation < maxGen) {
 
             pop.roulettewheelSelection();
 
@@ -52,27 +56,42 @@ public class Biocomp1 {
 
             pop.survivorSelection();
 
-            generations++;
+            generation++;
 
-            save(pop, log);
+            save(pop, log, generation);
         }
 
         System.out.println("Pop after 50 gen");
         pop.printPopulation();
     }
 
-    public static void save(population pop, File log) throws IOException {
+    public static void save(population pop, File log, int gen) throws IOException {
         
         int totalFitness = pop.calctotal();
         
         try (PrintWriter out = new PrintWriter(new FileWriter(log, true))) {
-            out.append(pop.getmutationRate());
+            out.append(Integer.toString(gen));
             out.append(",");
             out.append(Integer.toString(totalFitness));
             out.append(",");
             out.append(Integer.toString(totalFitness/pop.getSize()));
             out.append(",");
             out.append(pop.getBest());
+            out.append("\n");
+        }
+    }
+    
+    public static void addHeader(population pop, File log) throws IOException {
+        
+        try (PrintWriter out = new PrintWriter(new FileWriter(log, true))) {
+            out.append("Population size: ");
+            out.append(Integer.toString(pop.getSize()));
+            out.append(" - Mutation rate: ");
+            out.append(pop.getmutationRate());
+            out.append(" - Number of rules: ");
+            out.append(pop.getNumOfRules());
+            out.append(" - Data set used: ");
+            out.append(pop.getDataSetName());
             out.append("\n");
         }
     }

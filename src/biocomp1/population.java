@@ -375,13 +375,38 @@ public class population {
         return "" + population[topFitIndex].getFitness();
     }
 
+    /**
+     * Getter for mutationRate
+     * @return mutationRate
+     */
     public String getmutationRate() {
         return Double.toString(mutationRate);
     }
     
+    /**
+     * Getter for popSize.
+     * @return popSize 
+     */
     public int getSize() {
         return popSize;
     }
+    
+    /**
+     * Getter for numOfRules.
+     * @return numOfRules
+     */
+    public String getNumOfRules() {
+        return Integer.toString(numOfRules);
+    }
+    
+    /**
+     * Getter for fileName.
+     * @return the name name of the data set file used
+     */
+    public String getDataSetName() {
+        return fileName;
+    }
+    
 
     /**
      * Generate random bit between 0 to 2 inclusive.
