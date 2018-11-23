@@ -8,6 +8,7 @@ package biocomp1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -60,9 +61,9 @@ public class population {
                 
                 rand = getRandBit();
                 
-                //if currGene mod geneSize/10 == 0 then currGene is action bit
+                //if currGene mod (geneSize/10) == 0 then currGene is action bit
                 //if a 2 is generated on an ation bit try again
-                while (((j+1) % (geneSize / 10)) == 0 && (rand == 2)) {
+                while (((j+1) % ((geneSize / 10))) == 0 && (rand == 2)) {
                     rand = getRandBit();
                 }
                 
@@ -74,6 +75,10 @@ public class population {
             readTrainingData();
         } catch (FileNotFoundException e) {
             System.out.println("File error!\n" + e);
+        }
+        
+        for(data d : trainingData) {
+            System.out.println(Arrays.toString(d.getFullData()) + " " + d.getLabel());
         }
     }
 
@@ -121,7 +126,7 @@ public class population {
             for (data d : trainingData) {
                 for (rule r : ruleList) {
                     if (compareIntArrays(r.getCond(), d.getFullData())) {
-                        if (r.getOut() == d.getLabel()) {
+                        if (r.getOut() == d.getLabel()) {  //matches 2`s????
                             population[i].updateFitness();
                         }
                         break;
@@ -248,7 +253,7 @@ public class population {
                 mRate = Math.random();
                 
                 if (mRate < mutationRate) {
-                    if (i % offspring[i].getSize() == 0) {
+                    if (((j+1) % ((population[i].getSize() / 10))) == 0) {
                         tempRand = getRandBit() % 2;
                     } else {
                         tempRand = getRandBit();

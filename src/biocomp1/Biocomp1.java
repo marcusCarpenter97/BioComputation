@@ -43,7 +43,7 @@ public class Biocomp1 {
 
         save(pop, log, generation);
 
-        int maxGen = 3320;  // Best so far!!!
+        int maxGen = 2000;  // Best so far!!!
         while (generation < maxGen) {
 
             pop.roulettewheelSelection();

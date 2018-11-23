@@ -49,7 +49,7 @@ public class individual {
     public String toString() {
         String g = "";
         for (int i = 0; i < geneSize; i++) {
-            g += gene[i];
+            g += " " + gene[i];
         }
         return g + " - " + fitness;
     }
