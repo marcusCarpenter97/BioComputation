@@ -126,7 +126,7 @@ public class population {
             for (data d : trainingData) {
                 for (rule r : ruleList) {
                     if (compareIntArrays(r.getCond(), d.getFullData())) {
-                        if (r.getOut() == d.getLabel()) {  //matches 2`s????
+                        if (r.getOut() == d.getLabel()) {
                             population[i].updateFitness();
                         }
                         break;

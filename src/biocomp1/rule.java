@@ -11,9 +11,9 @@ package biocomp1;
  */
 public class rule {
 
-    private int[] cond;
+    private int[] cond;  // d3: 14 floats
     private int out;
-    private final int ruleSize;
+    private final int ruleSize;  // d3: 14
 
     public rule() {
         ruleSize = 7;  // 5 for data 1 or 7 for data 2
