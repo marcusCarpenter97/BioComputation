@@ -76,9 +76,6 @@ public class population {
             System.out.println("File error!\n" + e);
         }
         
-//        for(data d : trainingData) {
-//            System.out.println(Arrays.toString(d.getFullData()) + " " + d.getLabel());
-//        }
     }
 
     /**
@@ -302,7 +299,7 @@ public class population {
 
     /**
      * Calculate total fitness of population.
-     * @return 
+     * @return fitnessSum
      */
     public int calctotal() {
         
@@ -317,9 +314,9 @@ public class population {
     /**
      * Converts a string into an array of ints.
      * @param toInt a String of 1`s and 0`s
-     * @return 
+     * @return an int array 
      */
-    public int[] stringToInt(String toInt) {  // Waht if string contains chars???
+    public int[] stringToInt(String toInt) {
         
         int i;
         int[] ret = new int[toInt.length()];
@@ -416,7 +413,7 @@ public class population {
 
     /**
      * Generate random bit between 0 to 2 inclusive.
-     * @return 
+     * @return 0, 1 or 2
      */
     public int getRandBit() {
         
