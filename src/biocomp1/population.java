@@ -8,7 +8,6 @@ package biocomp1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -63,7 +62,7 @@ public class population {
                 
                 //if currGene mod (geneSize/10) == 0 then currGene is action bit
                 //if a 2 is generated on an ation bit try again
-                while (((j+1) % ((geneSize / 10))) == 0 && (rand == 2)) {
+                while (((j+1) % (geneSize / 10)) == 0 && (rand == 2)) {
                     rand = getRandBit();
                 }
                 
@@ -77,9 +76,9 @@ public class population {
             System.out.println("File error!\n" + e);
         }
         
-        for(data d : trainingData) {
-            System.out.println(Arrays.toString(d.getFullData()) + " " + d.getLabel());
-        }
+//        for(data d : trainingData) {
+//            System.out.println(Arrays.toString(d.getFullData()) + " " + d.getLabel());
+//        }
     }
 
     /**
@@ -303,6 +302,7 @@ public class population {
 
     /**
      * Calculate total fitness of population.
+     * @return 
      */
     public int calctotal() {
         
@@ -317,6 +317,7 @@ public class population {
     /**
      * Converts a string into an array of ints.
      * @param toInt a String of 1`s and 0`s
+     * @return 
      */
     public int[] stringToInt(String toInt) {  // Waht if string contains chars???
         
@@ -415,6 +416,7 @@ public class population {
 
     /**
      * Generate random bit between 0 to 2 inclusive.
+     * @return 
      */
     public int getRandBit() {
         
@@ -441,7 +443,6 @@ public class population {
         
         fitnessSum = calctotal();
         
-        // Print population
         for (i = 0; i < popSize; i++) {
             System.out.println(population[i].toString());
         }

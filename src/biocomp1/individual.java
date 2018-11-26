@@ -47,9 +47,16 @@ public class individual {
 
     @Override
     public String toString() {
+        
         String g = "";
+        
         for (int i = 0; i < geneSize; i++) {
-            g += " " + gene[i];
+            
+            if((i+1) % (geneSize / 10) == 0) {
+                g += " " + gene[i] + " ";
+            } else {
+            g += gene[i];
+            }
         }
         return g + " - " + fitness;
     }
