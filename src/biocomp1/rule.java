@@ -15,8 +15,8 @@ public class rule {
     private int out;
     private final int ruleSize;  // d3: 14
 
-    public rule() {
-        ruleSize = 7;  // 5 for data 1 or 7 for data 2
+    public rule(int ruleSize) {
+        this.ruleSize = ruleSize;
         cond = new int[ruleSize];
         out = 0;
     }

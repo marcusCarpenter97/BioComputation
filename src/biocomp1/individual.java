@@ -14,9 +14,11 @@ public class individual {
     private final int geneSize;
     private final int[] gene;
     private int fitness;
+    private final int ruleSize;
 
-    public individual() {
-        geneSize = 80;  // 60 for data 1 or 80 for data 2
+    public individual(int numOfRules, int ruleSize) {
+        this.ruleSize = ruleSize;
+        geneSize = numOfRules * (ruleSize+1);  // 60 for data 1 or 80 for data 2
         gene = new int[geneSize];
         fitness = 0;
     }
@@ -52,7 +54,7 @@ public class individual {
         
         for (int i = 0; i < geneSize; i++) {
             
-            if((i+1) % (geneSize / 10) == 0) {
+            if((i+1) % (ruleSize+1) == 0) {  // 6 for data1 and 8 for data2
                 g += " " + gene[i] + " ";
             } else {
             g += gene[i];

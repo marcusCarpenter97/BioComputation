@@ -26,19 +26,23 @@ public class population {
     private final ArrayList<rule> ruleList;
     private final String filePath;
     private final String fileName;
+    private final int ruleSize;
 
-    public population() {
+    public population(int popSize, double mutationRate, int numOfRules,
+            String fileName, int ruleSize) {
         
-        popSize = 10;
-        mutationRate = 0.01;
+        this.popSize = popSize;
+        this.mutationRate = mutationRate;
         population = new individual[popSize];
         offspring = new individual[popSize];
-        numOfRules = 10;
-        currRule = new rule();
+        this.numOfRules = numOfRules;
+        currRule = new rule(ruleSize);
         trainingData = new ArrayList<>();
         ruleList = new ArrayList<>();
         filePath = "/home/marcus/NetBeansProjects/biocomp1/src/dataFiles/";
-        fileName = "data2.txt";  // data1.txt or data.2txt
+        this.fileName = fileName;
+        this.ruleSize = ruleSize;
+        
     }
 
     /**
@@ -51,8 +55,8 @@ public class population {
         
         for (i = 0; i < popSize; i++) {
             
-            population[i] = new individual();
-            offspring[i] = new individual();
+            population[i] = new individual(numOfRules, ruleSize);
+            offspring[i] = new individual(numOfRules, ruleSize);
             
             geneSize = population[i].getSize();
             
@@ -62,7 +66,7 @@ public class population {
                 
                 //if currGene mod (geneSize/10) == 0 then currGene is action bit
                 //if a 2 is generated on an ation bit try again
-                while (((j+1) % (geneSize / 10)) == 0 && (rand == 2)) {
+                while (((j+1) % (ruleSize+1)) == 0 && (rand == 2)) {
                     rand = getRandBit();
                 }
                 
@@ -115,7 +119,7 @@ public class population {
 
                 ruleList.add(currRule);
 
-                currRule = new rule();
+                currRule = new rule(ruleSize);
             }
             
             // Find match in training data
@@ -249,10 +253,24 @@ public class population {
                 mRate = Math.random();
                 
                 if (mRate < mutationRate) {
-                    if (((j+1) % ((population[i].getSize() / 10))) == 0) {
-                        tempRand = getRandBit() % 2;
+                    
+                    // if action bit
+                    if (((j+1) % (ruleSize+1)) == 0) {
+                        
+                        // flip the bit
+                        if(offspring[i].getGene(j) == 0){
+                            tempRand = 1;
+                        } else {
+                            tempRand = 0;
+                        }
+                        
+                    // if condition bit
                     } else {
-                        tempRand = getRandBit();
+                        
+                        // get random bit that is different than the current bit
+                        do{
+                            tempRand = getRandBit();
+                        } while(tempRand == offspring[i].getGene(j));
                     }
                     offspring[i].setGene(tempRand, j);
                 }
@@ -271,7 +289,7 @@ public class population {
         int worstFit = 0, worstFitIndex = 0;
         
         individual[] tempIndv = new individual[1];
-        tempIndv[0] = new individual();
+        tempIndv[0] = new individual(numOfRules, ruleSize);
 
         for (i = 0; i < popSize; i++) {
             currFit = population[i].getFitness();
